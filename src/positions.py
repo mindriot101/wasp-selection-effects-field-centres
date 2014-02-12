@@ -72,23 +72,27 @@ def is_south_field(camera_id):
             logging.debug('Camera {} is north'.format(camera_id))
     return is_south
 
+def construct_rectangle(ra, dec, field_size_degrees, *args, **kwargs):
+    half_size = field_size_degrees / 2.
+    half_size_radians = np.radians(half_size)
+    field_size_radians = np.radians(field_size_degrees)
+
+    return plt.Rectangle((ra - half_size_radians, dec - half_size_radians),
+            field_size_radians, field_size_radians, *args, **kwargs)
+
+
+
 def field_rectangle((ra, dec, camera_id), field_size_degrees, *args, **kwargs):
     '''
     Constructs the matplotlib `Rectangle` of a single WASP field
     '''
-    half_size = field_size_degrees / 2.
-    half_size_radians = math.radians(half_size)
-    field_size_radians = math.radians(field_size_degrees)
-
     if is_south_field(camera_id):
         colour = SOUTH_COLOUR
     else:
         colour = NORTH_COLOUR
 
-    return plt.Rectangle((ra - half_size_radians, dec - half_size_radians),
-            field_size_radians, field_size_radians,
-            facecolor=colour, *args, **kwargs)
-            
+    return construct_rectangle(ra, dec, field_size_degrees, color=colour)
+
 def calculate_field_size():
     '''
     Returns the WASP field size from the single number I was given
