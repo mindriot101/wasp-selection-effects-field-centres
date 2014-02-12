@@ -10,7 +10,6 @@ from IPython import embed
 from astropy.io import fits as pyfits
 import itertools
 import re
-import math
 from astropy.coordinates import Galactic
 import astropy.units as u
 import logging
@@ -54,13 +53,13 @@ def get_files():
 def ra_to_radians(ra):
     hour, minute = int(ra[:2]), int(ra[2:])
     degrees = (hour + minute / 60.0) * 15.
-    return math.radians(degrees)
+    return np.radians(degrees)
 
 def dec_to_radians(dec):
     sign, degrees, minutes = dec[0], int(dec[1:3]), int(dec[3:])
     total = degrees + minutes / 60.
     full = -total if sign == '-' else total
-    return math.radians(full)
+    return np.radians(full)
     
 
 def is_south_field(camera_id):
@@ -99,7 +98,7 @@ def calculate_field_size():
     '''
     square_degrees = 64.
     logging.info("Using field size of {} square degrees".format(square_degrees))
-    return math.sqrt(square_degrees)
+    return np.sqrt(square_degrees)
 
 def galactic_plane():
     '''
@@ -199,7 +198,7 @@ def plot_latitudes(ax):
     south_lat = np.radians(-33.9347)
 
     for lat in north_lat, south_lat:
-        plt.plot([-math.pi, math.pi], [lat, lat], 'k--')
+        plt.plot([-np.pi, np.pi], [lat, lat], 'k--')
 
     
 def main():
