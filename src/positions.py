@@ -10,7 +10,7 @@ from IPython import embed
 from astropy.io import fits as pyfits
 import itertools
 import re
-from astropy.coordinates import Galactic
+from astropy.coordinates import Galactic, ICRS
 import astropy.units as u
 import logging
 from planetdatabase.waspdatabase import PublishedWASPDatabase as WASPDatabase
@@ -200,6 +200,16 @@ def plot_latitudes(ax):
     for lat in north_lat, south_lat:
         plt.plot([-np.pi, np.pi], [lat, lat], 'k--')
 
+def plot_kepler_field(ax):
+    centre = ICRS('19h22m40s +44d30m00s')
+    logging.info('Plotting kepler field at {}'.format(centre))
+    field_size = np.sqrt(105 * u.degree * u.degree).value
+
+    ra, dec = centre.ra.radian, centre.dec.radian
+    field = construct_rectangle(np.pi - ra, dec, field_size, color='k')
+    ax.add_patch(field)
+
+
     
 def main():
     field_size = calculate_field_size()
@@ -216,6 +226,7 @@ def main():
 
     plot_latitudes(ax)
     plot_galactic_plane(ax)
+    plot_kepler_field(ax)
     plot_known_planets(ax)
 
     plt.grid(True)
