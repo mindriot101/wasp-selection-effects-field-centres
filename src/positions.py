@@ -109,7 +109,7 @@ def galactic_plane():
     b_radians = np.zeros_like(l_radians)
 
     eq_coords = Galactic(l_radians, b_radians, unit=(u.radian, u.radian)).icrs
-    ra, dec = eq_coords.ra.value - math.pi, eq_coords.dec.value
+    ra, dec = np.pi - eq_coords.ra.value, eq_coords.dec.value
 
     # sort in order of ra
     ind = np.argsort(ra)
@@ -154,7 +154,7 @@ def known_planets():
                 dec = float(row[' dec'])
 
                 if ra != 0.0 and dec != 0.0:
-                    yield np.radians(ra - 180), np.radians(dec)
+                    yield np.radians(180 - ra), np.radians(dec)
 
     logging.debug('Not included planets: {}'.format(names - included))
 
@@ -167,7 +167,7 @@ def plot_known_planets(ax):
 def extract_field_info(fname):
     logging.info("Extracting information for [{}]".format(fname))
     match = REGEX.search(fname)
-    ra = ra_to_radians(match.group('ra')) - math.pi
+    ra = np.pi - ra_to_radians(match.group('ra'))
     dec = dec_to_radians(match.group('dec'))
     with pyfits.open(fname) as infile:
         camera_id = infile[0].header['camera_id']
