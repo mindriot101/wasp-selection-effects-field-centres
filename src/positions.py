@@ -230,7 +230,8 @@ def main():
     plot_known_planets(ax)
 
     plt.grid(True)
-    plt.savefig(os.path.join(output_dir, 'fields.png'), bbox_inches='tight')
+    for suffix in ['png', 'pdf']:
+        plt.savefig(os.path.join(output_dir, '.'.join(['fields', suffix])), bbox_inches='tight')
     plt.show()
 
 if __name__ == '__main__':
